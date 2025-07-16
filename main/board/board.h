@@ -7,6 +7,8 @@
 #include <udp.h>
 #include <string>
 
+#include "led/led.h"
+
 void* create_board();
 class AudioCodec;
 class Display;
@@ -23,16 +25,16 @@ protected:
     std::string uuid_;
 
 public:
-    // static Board& GetInstance() {
-    //     static Board* instance = static_cast<Board*>(create_board());
-    //     return *instance;
-    // }
+    static Board& GetInstance() {
+        static Board* instance = static_cast<Board*>(create_board());
+        return *instance;
+    }
 
     virtual ~Board() = default;
     virtual std::string GetBoardType() = 0;
     virtual std::string GetUuid() { return uuid_; }
     // virtual Backlight* GetBacklight() { return nullptr; }
-    // virtual Led* GetLed();
+    virtual Led* GetLed();
     // virtual AudioCodec* GetAudioCodec() = 0;
     // virtual bool GetTemperature(float& esp32temp);
     // virtual Display* GetDisplay();
@@ -50,9 +52,9 @@ public:
     virtual std::string GetDeviceStatusJson() = 0;
 };
 
-// #define DECLARE_BOARD(BOARD_CLASS_NAME) 
-// void* create_board() { 
-//     return new BOARD_CLASS_NAME(); 
-// }
+#define DECLARE_BOARD(BOARD_CLASS_NAME) \
+void* create_board() { \
+    return new BOARD_CLASS_NAME(); \
+}
 
 #endif // BOARD_H

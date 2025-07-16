@@ -14,6 +14,7 @@
 #include <ssid_manager.h>
 #include "settings.h"
 #include "system_info.h"
+#include "application.h"
 
 static const char *TAG = "WifiBoard";
 
@@ -34,8 +35,8 @@ std::string WifiBoard::GetBoardType() {
 
 void WifiBoard::EnterWifiConfigMode() {
     ESP_LOGI(TAG, "进入 WiFi 配置模式");
-    // auto& application = Application::GetInstance();
-    // application.SetDeviceState(kDeviceStateWifiConfiguring);
+    auto& application = Application::GetInstance();
+    application.SetDeviceState(kDeviceStateWifiConfiguring);
 
     auto& wifi_ap = WifiConfigurationAp::GetInstance();
     wifi_ap.SetSsidPrefix("Xiaozhi");

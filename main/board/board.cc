@@ -43,6 +43,11 @@ std::string Board::GenerateUuid() {
     return std::string(uuid_str);
 }
 
+Led* Board::GetLed() {
+    static NoLed led;
+    return &led;
+}
+
 std::string Board::GetJson() {
     /* 
         {

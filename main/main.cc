@@ -8,7 +8,7 @@
 #include <esp_event.h>
 #include <string>
 
-#include "wifi_board.h"
+#include "application.h"
 
 
 #define TAG "main"
@@ -27,10 +27,7 @@ extern "C" void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
-    WifiBoard board;
-    ESP_LOGI("Main", "Network started");
-    board.StartNetwork();    
-
-    ESP_LOGI("Main", "Network started successfully");
+    // Launch the application
+    Application::GetInstance().Start();
 
 }

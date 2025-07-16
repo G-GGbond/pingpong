@@ -16,3 +16,5 @@ dependencies:
   #   public: true
   78/esp-ml307: ^2.2.1
   78/esp-wifi-connect: ^2.4.3
+  espressif/led_strip: ^3.0.1~1
+  espressif/button: =*
