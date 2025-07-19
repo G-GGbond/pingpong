@@ -558,13 +558,14 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
-# Example Configuration
+# Xiaozhi Assistant
 #
-CONFIG_ESP_WIFI_SSID="myssid"
-CONFIG_ESP_WIFI_PASSWORD="mypassword"
-CONFIG_ESP_WIFI_CHANNEL=1
-CONFIG_ESP_MAX_STA_CONN=4
-# end of Example Configuration
+CONFIG_OTA_URL="https://api.tenclass.net/xiaozhi/ota/"
+CONFIG_LANGUAGE_ZH_CN=y
+# CONFIG_LANGUAGE_ZH_TW is not set
+# CONFIG_LANGUAGE_EN_US is not set
+# CONFIG_LANGUAGE_JA_JP is not set
+# end of Xiaozhi Assistant
 
 #
 # Compiler options

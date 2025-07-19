@@ -17,8 +17,8 @@
 // #include <opus_decoder.h>
 // #include <opus_resampler.h>
 
-// #include "protocol.h"
-// #include "ota.h"
+#include "protocol.h"
+#include "ota.h"
 // #include "background_task.h"
 // #include "audio_processor.h"
 // #include "wake_word.h"
@@ -91,10 +91,10 @@ private:
     // std::unique_ptr<WakeWord> wake_word_;
     // std::unique_ptr<AudioProcessor> audio_processor_;
     // std::unique_ptr<AudioDebugger> audio_debugger_;
-    // std::mutex mutex_;
+    std::mutex mutex_;
     // std::list<std::function<void()>> main_tasks_;
-    // std::unique_ptr<Protocol> protocol_;
-    // EventGroupHandle_t event_group_ = nullptr;
+    std::unique_ptr<Protocol> protocol_;
+    EventGroupHandle_t event_group_ = nullptr;
     // esp_timer_handle_t clock_timer_handle_ = nullptr;
     volatile DeviceState device_state_ = kDeviceStateUnknown;
     // ListeningMode listening_mode_ = kListeningModeAutoStop;
@@ -132,7 +132,7 @@ private:
     // void OnAudioOutput();
     // void ResetDecoder();
     // void SetDecodeSampleRate(int sample_rate, int frame_duration);
-    // void CheckNewVersion(Ota& ota);
+    void CheckNewVersion(Ota& ota);
     void ShowActivationCode(const std::string& code, const std::string& message);
     void OnClockTimer();
     // void SetListeningMode(ListeningMode mode);

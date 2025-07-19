@@ -4,7 +4,7 @@
 #include "system_info.h"
 // #include "ml307_ssl_transport.h"
 // #include "audio_codec.h"
-// #include "mqtt_protocol.h"
+#include "mqtt_protocol.h"
 // #include "websocket_protocol.h"
 // #include "font_awesome_symbols.h"
 // #include "iot/thing_manager.h"
@@ -100,113 +100,114 @@ Application::~Application() {}
 //     vEventGroupDelete(event_group_);
 // }
 
-// void Application::CheckNewVersion(Ota& ota) {
-//     const int MAX_RETRY = 10;
-//     int retry_count = 0;
-//     int retry_delay = 10; // 初始重试延迟为10秒
+void Application::CheckNewVersion(Ota& ota) {
+    const int MAX_RETRY = 10;
+    int retry_count = 0;
+    int retry_delay = 10; // 初始重试延迟为10秒
 
-//     while (true) {
-//         SetDeviceState(kDeviceStateActivating);
-//         auto display = Board::GetInstance().GetDisplay();
-//         display->SetStatus(Lang::Strings::CHECKING_NEW_VERSION);
+    while (true) {
+        SetDeviceState(kDeviceStateActivating);
+        // auto display = Board::GetInstance().GetDisplay();
+        // display->SetStatus(Lang::Strings::CHECKING_NEW_VERSION);
 
-//         if (!ota.CheckVersion()) {
-//             retry_count++;
-//             if (retry_count >= MAX_RETRY) {
-//                 ESP_LOGE(TAG, "Too many retries, exit version check");
-//                 return;
-//             }
+        if (!ota.CheckVersion()) {
+            retry_count++;
+            if (retry_count >= MAX_RETRY) {
+                ESP_LOGE(TAG, "Too many retries, exit version check");
+                return;
+            }
 
-//             char buffer[128];
-//             snprintf(buffer, sizeof(buffer), Lang::Strings::CHECK_NEW_VERSION_FAILED, retry_delay, ota.GetCheckVersionUrl().c_str());
-//             Alert(Lang::Strings::ERROR, buffer, "sad", Lang::Sounds::P3_EXCLAMATION);
+            // char buffer[128];
+            // snprintf(buffer, sizeof(buffer), Lang::Strings::CHECK_NEW_VERSION_FAILED, retry_delay, ota.GetCheckVersionUrl().c_str());
+            // Alert(Lang::Strings::ERROR, buffer, "sad", Lang::Sounds::P3_EXCLAMATION);
 
-//             ESP_LOGW(TAG, "Check new version failed, retry in %d seconds (%d/%d)", retry_delay, retry_count, MAX_RETRY);
-//             for (int i = 0; i < retry_delay; i++) {
-//                 vTaskDelay(pdMS_TO_TICKS(1000));
-//                 if (device_state_ == kDeviceStateIdle) {
-//                     break;
-//                 }
-//             }
-//             retry_delay *= 2; // 每次重试后延迟时间翻倍
-//             continue;
-//         }
-//         retry_count = 0;
-//         retry_delay = 10; // 重置重试延迟时间
+            ESP_LOGW(TAG, "Check new version failed, retry in %d seconds (%d/%d)", retry_delay, retry_count, MAX_RETRY);
+            for (int i = 0; i < retry_delay; i++) {
+                vTaskDelay(pdMS_TO_TICKS(1000));
+                if (device_state_ == kDeviceStateIdle) {
+                    break;
+                }
+            }
+            retry_delay *= 2; // 每次重试后延迟时间翻倍
+            continue;
+        }
+        retry_count = 0;
+        retry_delay = 10; // 重置重试延迟时间
 
-//         if (ota.HasNewVersion()) {
-//             Alert(Lang::Strings::OTA_UPGRADE, Lang::Strings::UPGRADING, "happy", Lang::Sounds::P3_UPGRADE);
+        // if (ota.HasNewVersion()) {
+            if (0) {
+            // Alert(Lang::Strings::OTA_UPGRADE, Lang::Strings::UPGRADING, "happy", Lang::Sounds::P3_UPGRADE);
 
-//             vTaskDelay(pdMS_TO_TICKS(3000));
+            vTaskDelay(pdMS_TO_TICKS(3000));
 
-//             SetDeviceState(kDeviceStateUpgrading);
+            SetDeviceState(kDeviceStateUpgrading);
             
-//             display->SetIcon(FONT_AWESOME_DOWNLOAD);
-//             std::string message = std::string(Lang::Strings::NEW_VERSION) + ota.GetFirmwareVersion();
-//             display->SetChatMessage("system", message.c_str());
+            // display->SetIcon(FONT_AWESOME_DOWNLOAD);
+            // std::string message = std::string(Lang::Strings::NEW_VERSION) + ota.GetFirmwareVersion();
+            // display->SetChatMessage("system", message.c_str());
 
-//             auto& board = Board::GetInstance();
-//             board.SetPowerSaveMode(false);
-//             wake_word_->StopDetection();
-//             // 预先关闭音频输出，避免升级过程有音频操作
-//             auto codec = board.GetAudioCodec();
-//             codec->EnableInput(false);
-//             codec->EnableOutput(false);
-//             {
-//                 std::lock_guard<std::mutex> lock(mutex_);
-//                 audio_decode_queue_.clear();
-//             }
-//             background_task_->WaitForCompletion();
-//             delete background_task_;
-//             background_task_ = nullptr;
-//             vTaskDelay(pdMS_TO_TICKS(1000));
+            auto& board = Board::GetInstance();
+            board.SetPowerSaveMode(false);
+            // wake_word_->StopDetection();
+            // 预先关闭音频输出，避免升级过程有音频操作
+            // auto codec = board.GetAudioCodec();
+            // codec->EnableInput(false);
+            // codec->EnableOutput(false);
+            {
+                // std::lock_guard<std::mutex> lock(mutex_);
+                // audio_decode_queue_.clear();
+            }
+            // background_task_->WaitForCompletion();
+            // delete background_task_;
+            // background_task_ = nullptr;
+            vTaskDelay(pdMS_TO_TICKS(1000));
 
-//             ota.StartUpgrade([display](int progress, size_t speed) {
-//                 char buffer[64];
-//                 snprintf(buffer, sizeof(buffer), "%d%% %uKB/s", progress, speed / 1024);
-//                 display->SetChatMessage("system", buffer);
-//             });
+            // ota.StartUpgrade([display](int progress, size_t speed) {
+            //     char buffer[64];
+            //     snprintf(buffer, sizeof(buffer), "%d%% %uKB/s", progress, speed / 1024);
+            //     display->SetChatMessage("system", buffer);
+            // });
 
-//             // If upgrade success, the device will reboot and never reach here
-//             display->SetStatus(Lang::Strings::UPGRADE_FAILED);
-//             ESP_LOGI(TAG, "Firmware upgrade failed...");
-//             vTaskDelay(pdMS_TO_TICKS(3000));
-//             Reboot();
-//             return;
-//         }
+            // If upgrade success, the device will reboot and never reach here
+            // display->SetStatus(Lang::Strings::UPGRADE_FAILED);
+            ESP_LOGI(TAG, "Firmware upgrade failed...");
+            vTaskDelay(pdMS_TO_TICKS(3000));
+            Reboot();
+            return;
+        }
 
-//         // No new version, mark the current version as valid
-//         ota.MarkCurrentVersionValid();
-//         if (!ota.HasActivationCode() && !ota.HasActivationChallenge()) {
-//             xEventGroupSetBits(event_group_, CHECK_NEW_VERSION_DONE_EVENT);
-//             // Exit the loop if done checking new version
-//             break;
-//         }
+        // No new version, mark the current version as valid
+        ota.MarkCurrentVersionValid();
+        if (!ota.HasActivationCode() && !ota.HasActivationChallenge()) {
+            xEventGroupSetBits(event_group_, CHECK_NEW_VERSION_DONE_EVENT);
+            // Exit the loop if done checking new version
+            break;
+        }
 
-//         display->SetStatus(Lang::Strings::ACTIVATION);
-//         // Activation code is shown to the user and waiting for the user to input
-//         if (ota.HasActivationCode()) {
-//             ShowActivationCode(ota.GetActivationCode(), ota.GetActivationMessage());
-//         }
+        // display->SetStatus(Lang::Strings::ACTIVATION);
+        // Activation code is shown to the user and waiting for the user to input
+        // if (ota.HasActivationCode()) {
+        //     ShowActivationCode(ota.GetActivationCode(), ota.GetActivationMessage());
+        // }
 
-//         // This will block the loop until the activation is done or timeout
-//         for (int i = 0; i < 10; ++i) {
-//             ESP_LOGI(TAG, "Activating... %d/%d", i + 1, 10);
-//             esp_err_t err = ota.Activate();
-//             if (err == ESP_OK) {
-//                 xEventGroupSetBits(event_group_, CHECK_NEW_VERSION_DONE_EVENT);
-//                 break;
-//             } else if (err == ESP_ERR_TIMEOUT) {
-//                 vTaskDelay(pdMS_TO_TICKS(3000));
-//             } else {
-//                 vTaskDelay(pdMS_TO_TICKS(10000));
-//             }
-//             if (device_state_ == kDeviceStateIdle) {
-//                 break;
-//             }
-//         }
-//     }
-// }
+        // This will block the loop until the activation is done or timeout
+        for (int i = 0; i < 10; ++i) {
+            ESP_LOGI(TAG, "Activating... %d/%d", i + 1, 10);
+            esp_err_t err = ota.Activate();
+            if (err == ESP_OK) {
+                xEventGroupSetBits(event_group_, CHECK_NEW_VERSION_DONE_EVENT);
+                break;
+            } else if (err == ESP_ERR_TIMEOUT) {
+                vTaskDelay(pdMS_TO_TICKS(3000));
+            } else {
+                vTaskDelay(pdMS_TO_TICKS(10000));
+            }
+            if (device_state_ == kDeviceStateIdle) {
+                break;
+            }
+        }
+    }
+}
 
 // void Application::ShowActivationCode(const std::string& code, const std::string& message) {
 //     struct digit_sound {
@@ -436,7 +437,7 @@ void Application::Start() {
     // display->UpdateStatusBar(true);
 
     // Check for new firmware version or get the MQTT broker address
-    // Ota ota;
+    Ota ota;
     // CheckNewVersion(ota);
 
     // Initialize the protocol
@@ -447,31 +448,29 @@ void Application::Start() {
 //     McpServer::GetInstance().AddCommonTools();
 // #endif
 
-//     if (ota.HasMqttConfig()) {
-//         protocol_ = std::make_unique<MqttProtocol>();
-//     } else if (ota.HasWebsocketConfig()) {
-//         protocol_ = std::make_unique<WebsocketProtocol>();
-//     } else {
-//         ESP_LOGW(TAG, "No protocol specified in the OTA config, using MQTT");
-//         protocol_ = std::make_unique<MqttProtocol>();
-//     }
+    if (ota.HasMqttConfig()) {
+        protocol_ = std::make_unique<MqttProtocol>();
+    } else {
+        ESP_LOGW(TAG, "No protocol specified in the OTA config, using MQTT");
+        protocol_ = std::make_unique<MqttProtocol>();
+    }
 
-//     protocol_->OnNetworkError([this](const std::string& message) {
-//         SetDeviceState(kDeviceStateIdle);
-//         Alert(Lang::Strings::ERROR, message.c_str(), "sad", Lang::Sounds::P3_EXCLAMATION);
-//     });
-//     protocol_->OnIncomingAudio([this](AudioStreamPacket&& packet) {
-//         std::lock_guard<std::mutex> lock(mutex_);
-//         if (device_state_ == kDeviceStateSpeaking && audio_decode_queue_.size() < MAX_AUDIO_PACKETS_IN_QUEUE) {
-//             audio_decode_queue_.emplace_back(std::move(packet));
-//         }
-//     });
-//     protocol_->OnAudioChannelOpened([this, codec, &board]() {
-//         board.SetPowerSaveMode(false);
-//         if (protocol_->server_sample_rate() != codec->output_sample_rate()) {
-//             ESP_LOGW(TAG, "Server sample rate %d does not match device output sample rate %d, resampling may cause distortion",
-//                 protocol_->server_sample_rate(), codec->output_sample_rate());
-//         }
+    // protocol_->OnNetworkError([this](const std::string& message) {
+        // SetDeviceState(kDeviceStateIdle);
+        // Alert(Lang::Strings::ERROR, message.c_str(), "sad", Lang::Sounds::P3_EXCLAMATION);
+    // });
+    // protocol_->OnIncomingAudio([this](AudioStreamPacket&& packet) {
+    //     std::lock_guard<std::mutex> lock(mutex_);
+    //     if (device_state_ == kDeviceStateSpeaking && audio_decode_queue_.size() < MAX_AUDIO_PACKETS_IN_QUEUE) {
+    //         audio_decode_queue_.emplace_back(std::move(packet));
+    //     }
+    // });
+    // protocol_->OnAudioChannelOpened([this, codec, &board]() {
+    //     board.SetPowerSaveMode(false);
+    //     if (protocol_->server_sample_rate() != codec->output_sample_rate()) {
+    //         ESP_LOGW(TAG, "Server sample rate %d does not match device output sample rate %d, resampling may cause distortion",
+    //             protocol_->server_sample_rate(), codec->output_sample_rate());
+    //     }
 
 // #if CONFIG_IOT_PROTOCOL_XIAOZHI
 //         auto& thing_manager = iot::ThingManager::GetInstance();
@@ -581,7 +580,7 @@ void Application::Start() {
 //             ESP_LOGW(TAG, "Unknown message type: %s", type->valuestring);
 //         }
 //     });
-//     bool protocol_started = protocol_->Start();
+    bool protocol_started = protocol_->Start();
 
 //     audio_debugger_ = std::make_unique<AudioDebugger>();
 //     audio_processor_->Initialize(codec);
@@ -681,9 +680,9 @@ void Application::Start() {
 //     });
 //     wake_word_->StartDetection();
 
-//     // Wait for the new version check to finish
-//     xEventGroupWaitBits(event_group_, CHECK_NEW_VERSION_DONE_EVENT, pdTRUE, pdFALSE, portMAX_DELAY);
-//     SetDeviceState(kDeviceStateIdle);
+    // Wait for the new version check to finish
+    // xEventGroupWaitBits(event_group_, CHECK_NEW_VERSION_DONE_EVENT, pdTRUE, pdFALSE, portMAX_DELAY);
+    SetDeviceState(kDeviceStateIdle);
 
 //     has_server_time_ = ota.HasServerTime();
 //     if (protocol_started) {

@@ -99,11 +99,11 @@ private:
 //     }
 
     void InitializeButtons() {
-        ESP_LOGI(TAG, "进入 CompactWifiBoard板级代码初始化");
+        // ESP_LOGI(TAG, "进入 CompactWifiBoard板级代码初始化");
         boot_button_.OnClick([this]() {
             auto& app = Application::GetInstance();
             if (app.GetDeviceState() == kDeviceStateStarting && !WifiStation::GetInstance().IsConnected()) {
-                ESP_LOGI(TAG, "进入配网模式");
+                // ESP_LOGI(TAG, "进入配网模式");
                 ResetWifiConfiguration();
             }
             // app.ToggleChatState();
