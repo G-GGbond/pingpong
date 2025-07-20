@@ -14,7 +14,7 @@ dependencies:
   #   # `public` flag doesn't have an effect dependencies of the `main` component.
   #   # All dependencies of `main` are public by default.
   #   public: true
-  78/esp-ml307: ^2.2.1
+ 
   78/esp-wifi-connect: ^2.4.3
   espressif/led_strip: ^3.0.1~1
   espressif/button: =*

@@ -1,12 +1,12 @@
 #include "wifi_board.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
-#include <esp_http.h>
+// #include <esp_http.h>
 #include <esp_mqtt.h>
-#include <esp_udp.h>
-#include <tcp_transport.h>
-#include <tls_transport.h>
-#include <web_socket.h>
+// #include <esp_udp.h>
+// #include <tcp_transport.h>
+// #include <tls_transport.h>
+// #include <web_socket.h>
 #include <esp_log.h>
 #include <cJSON.h>
 #include <wifi_station.h>
@@ -88,34 +88,34 @@ void WifiBoard::StartNetwork() {
     ESP_LOGI(TAG, "WiFi 连接成功，SSID: %s", wifi_station.GetSsid().c_str());
 }
 
-Http* WifiBoard::CreateHttp() {
-    ESP_LOGI(TAG, "创建 HTTP 实例");
-    return new EspHttp();
-}
+// Http* WifiBoard::CreateHttp() {
+//     ESP_LOGI(TAG, "创建 HTTP 实例");
+//     return new EspHttp();
+// }
 
-WebSocket* WifiBoard::CreateWebSocket() {
-    Settings settings("websocket", false);
-    std::string url = settings.GetString("url");
-    ESP_LOGI(TAG, "创建 WebSocket 实例，URL: %s", url.c_str());
-    if (url.find("wss://") == 0) {
-        ESP_LOGI(TAG, "检测到 wss:// 协议，使用 TLS 传输");
-        return new WebSocket(new TlsTransport());
-    } else {
-        ESP_LOGI(TAG, "使用 TCP 传输");
-        return new WebSocket(new TcpTransport());
-    }
-    return nullptr;
-}
+// WebSocket* WifiBoard::CreateWebSocket() {
+//     Settings settings("websocket", false);
+//     std::string url = settings.GetString("url");
+//     ESP_LOGI(TAG, "创建 WebSocket 实例，URL: %s", url.c_str());
+//     if (url.find("wss://") == 0) {
+//         ESP_LOGI(TAG, "检测到 wss:// 协议，使用 TLS 传输");
+//         return new WebSocket(new TlsTransport());
+//     } else {
+//         ESP_LOGI(TAG, "使用 TCP 传输");
+//         return new WebSocket(new TcpTransport());
+//     }
+//     return nullptr;
+// }
 
 Mqtt* WifiBoard::CreateMqtt() {
     ESP_LOGI(TAG, "创建 MQTT 实例");
     return new EspMqtt();
 }
 
-Udp* WifiBoard::CreateUdp() {
-    ESP_LOGI(TAG, "创建 UDP 实例");
-    return new EspUdp();
-}
+// Udp* WifiBoard::CreateUdp() {
+//     ESP_LOGI(TAG, "创建 UDP 实例");
+//     return new EspUdp();
+// }
 
 std::string WifiBoard::GetBoardJson() {
     ESP_LOGI(TAG, "生成板子 JSON 数据");

@@ -4,7 +4,7 @@
 
 #include "protocol.h"
 #include <mqtt.h>
-#include <udp.h>
+// #include <udp.h>
 #include <cJSON.h>
 #include <mbedtls/aes.h>
 #include <freertos/FreeRTOS.h>
@@ -26,10 +26,10 @@ public:
     ~MqttProtocol();
 
     bool Start() override;
-    bool SendAudio(const AudioStreamPacket& packet) override;
-    bool OpenAudioChannel() override;
-    void CloseAudioChannel() override;
-    bool IsAudioChannelOpened() const override;
+    // bool SendAudio(const AudioStreamPacket& packet) override;
+    // bool OpenAudioChannel() override;
+    // void CloseAudioChannel() override;
+    // bool IsAudioChannelOpened() const override;
 
 private:
     EventGroupHandle_t event_group_handle_;
@@ -38,7 +38,7 @@ private:
 
     std::mutex channel_mutex_;
     Mqtt* mqtt_ = nullptr;
-    Udp* udp_ = nullptr;
+    // Udp* udp_ = nullptr;
     mbedtls_aes_context aes_ctx_;
     std::string aes_nonce_;
     std::string udp_server_;

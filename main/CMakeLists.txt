@@ -11,7 +11,9 @@ idf_component_register(SRCS "application.cc"
                             "board/board.cc"
                             "protocols/protocol.cc"
                             "protocols/mqtt_protocol.cc"
+                            "protocols/esp_mqtt.cc"
 
 
-                        INCLUDE_DIRS "." "board" "led" "protocols")
+                        INCLUDE_DIRS "." "board" "led" "protocols"
+                        EMBED_TXTFILES "my_ca_cert.pem")
                      
